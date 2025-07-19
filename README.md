@@ -5,6 +5,15 @@
 [![License](https://poser.pugx.org/ladumor/laravel-pwa/license)](https://packagist.org/packages/ladumor/laravel-pwa)
 [![PHP Version Require](https://poser.pugx.org/ladumor/laravel-pwa/require/php)](https://packagist.org/packages/ladumor/laravel-pwa)
 
+<a href="https://www.buymeacoffee.com/ladumor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
+# LaraJob
+Looking for your next Laravel developer position or talent to join your team? I’ve partnered with [LaraJobs](https://larajobs.com/?via=shaileshkumar) to bring you the best Laravel jobs and developer opportunities.
+
+As an affiliate, I may earn a small commission if you land a job or post a job through the link. Your support helps me continue to build great open-source tools!
+
+Check out the [LaraJobs platform here](https://larajobs.com/?via=shaileshkumar) and start exploring opportunities today!
+
 # Laravel PWA
 ## You can follow this video tutorial as well for installation.
 
@@ -81,10 +90,11 @@ Also include the JS: (Add following code in root blade file in before close the 
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 
-<a href="https://www.buymeacoffee.com/ladumor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Note
  PWA only works with https. so, you need to run either with  `php artisan serve` or create a virtual host with https.
  you can watch the video for how to create a virtual host with HTTPS
 
 [<img src="https://img.youtube.com/vi/D5IqDcHyXSQ/0.jpg" width="550">](https://youtu.be/D5IqDcHyXSQ)
+
+
