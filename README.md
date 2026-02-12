@@ -162,6 +162,36 @@ To update your PWA version and bust all caches, simply run:
 php artisan laravel-pwa:publish
 ```
 
+## Debug & Dev Tools
+
+This package includes a set of developer-friendly tools to help you debug your PWA implementation.
+
+### Artisan Command
+Run the following command to see debugging tips:
+```bash
+php artisan pwa:debug
+```
+
+### On-Screen Debug Helper
+Add the `@pwaDebug` directive to your blade file (ideally only in development). It will only load if `APP_DEBUG=true` in your `.env`.
+
+```blade
+@pwaDebug
+```
+
+This directive injects a global `window.laravelPwaDebug` object into your browser console with the following utilities:
+
+| Method | Description |
+| --- | --- |
+| `laravelPwaDebug.viewCaches()` | List all PWA caches and their current contents. |
+| `laravelPwaDebug.clearCaches()` | Clear all PWA-related caches. |
+| `laravelPwaDebug.forceUpdate()` | Force a Service Worker update check. |
+| `laravelPwaDebug.unregister()` | Unregister all Service Workers for the domain. |
+| `laravelPwaDebug.help()` | Show available debug commands. |
+
+### Service Worker Logging
+The Service Worker now includes basic lifecycle logging (Installing, Activated) to help you track its state in the browser console.
+
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 

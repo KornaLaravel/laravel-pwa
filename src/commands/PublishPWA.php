@@ -77,6 +77,10 @@ class PublishPWA extends Command
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'background-sync.js', $bgSyncTemplate);
         $this->info('background-sync.js (Background Sync) file is published.');
 
+        $debugTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-debug.stub');
+        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-debug.js', $debugTemplate);
+        $this->info('pwa-debug.js (Debug Tool) file is published.');
+
 
         $logoPath = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
         if (!file_exists($logoPath)) {

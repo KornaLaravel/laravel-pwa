@@ -5,6 +5,7 @@ namespace Ladumor\LaravelPwa;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Ladumor\LaravelPwa\commands\PublishPWA;
+use Ladumor\LaravelPwa\commands\DebugPWA;
 
 class PWAServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,26 @@ class PWAServiceProvider extends ServiceProvider
         $this->registerPwaUpdateNotifier();
         $this->registerLaravelPwa();
         $this->registerPwaInstallButton();
+        $this->registerPwaDebug();
+    }
+
+    /**
+     * Register pwaDebug blade directive
+     *
+     * @return void
+     */
+    protected function registerPwaDebug()
+    {
+        Blade::directive('pwaDebug', function () {
+            if (config('app.debug')) {
+                $version = time();
+                $pwaDebug = asset('pwa-debug.js') . '?v=' . $version;
+                return <<<HTML
+<script src="{$pwaDebug}"></script>
+HTML;
+            }
+            return '';
+        });
     }
 
     /**
@@ -109,8 +130,13 @@ HTML;
         return new PublishPWA();
        });
 
+      $this->app->singleton('pwa:debug', function ($app) {
+        return new DebugPWA();
+       });
+
       $this->commands([
           'laravel-pwa:publish',
+          'pwa:debug',
       ]);
     }
 }
