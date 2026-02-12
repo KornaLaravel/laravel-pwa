@@ -53,7 +53,10 @@ class PublishPWA extends Command
         $this->generateIcons($sourceImage, $publicDir, $sizes);
         $this->info('Icons generated successfully.');
 
+        $version = time();
+        
         $manifestTemplate = file_get_contents(__DIR__ . '/../stubs/manifest.stub');
+        $manifestTemplate = str_replace('{{VERSION}}', $version, $manifestTemplate);
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'manifest.json', $manifestTemplate);
         $this->info('manifest.json file is published.');
 
@@ -62,8 +65,9 @@ class PublishPWA extends Command
         $this->info('offline.html file is published.');
 
         $swTemplate = file_get_contents(__DIR__ . '/../stubs/sw.stub');
+        $swTemplate = str_replace('{{VERSION}}', $version, $swTemplate);
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'sw.js', $swTemplate);
-        $this->info('sw.js (Service Worker) file is published.');
+        $this->info("sw.js (Service Worker) file is published with version: {$version}.");
 
         $swTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-install.stub');
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-install.js', $swTemplate);

@@ -55,8 +55,10 @@ HTML;
     protected function registerLaravelPwa()
     {
         Blade::directive('laravelPwa', function () {
-            $pwaInstall = asset('pwa-install.js');
-            $bgSync = asset('background-sync.js');
+            $version = time();
+            $pwaInstall = asset('pwa-install.js') . '?v=' . $version;
+            $bgSync = asset('background-sync.js') . '?v=' . $version;
+            $swUrl = '/sw.js?v=' . $version;
             return <<<HTML
 <script src="{$pwaInstall}"></script>
 <script src="{$bgSync}"></script>
@@ -64,7 +66,7 @@ HTML;
     if ("serviceWorker" in navigator) {
         // Register a service worker hosted at the root of the
         // site using the default scope.
-        navigator.serviceWorker.register("/sw.js").then(
+        navigator.serviceWorker.register("{$swUrl}").then(
             (registration) => {
                 console.log("Service worker registration succeeded:", registration);
             },

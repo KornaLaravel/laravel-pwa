@@ -147,6 +147,21 @@ This package includes a tool to automatically generate all required PWA icons an
 
 If `pwa-source.png` is not found, the package will use a default logo to generate the assets.
 
+### Smart Versioning & Cache Busting
+
+This package includes a smart versioning system to ensure that your users always have the latest version of your PWA and its assets.
+
+#### How it works:
+1.  **Service Worker Versioning**: Every time you run `php artisan laravel-pwa:publish`, a new unique version ID is generated and embedded in your `sw.js`. This triggers an update in the user's browser.
+2.  **Manifest & Icon Cache Busting**: The `manifest.json` and all listed icons include version query parameters, ensuring that browsers and devices refresh them when you re-publish.
+3.  **Blade Directive versioning**: The `@laravelPwa` directive automatically appends a version timestamp to the `sw.js`, `pwa-install.js`, and `background-sync.js` script registrations. This forces the browser to check for a new Service Worker file immediately.
+4.  **Automatic Update Notification**: When a new version is detected, the `@pwaUpdateNotifier` directive (if included) will automatically handle the `skipWaiting` and reload the page to activate the new Service Worker, ensuring a seamless update experience for users.
+
+To update your PWA version and bust all caches, simply run:
+```bash
+php artisan laravel-pwa:publish
+```
+
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 
