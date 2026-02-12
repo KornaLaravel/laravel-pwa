@@ -85,6 +85,53 @@ if (window.laravelPwaSync) {
 ### Browser Support
 Background Sync relies on the `Service Worker` and `SyncManager` API. If the browser does not support these features, the application will continue to work as a standard web application without background synchronization.
 
+## Smart Install Prompt Manager
+
+This package provides helpers to manage the PWA installation experience effectively.
+
+### Detecting Installability
+You can check if the app is ready to be installed using `window.laravelPwaInstall.canInstall()`.
+
+```javascript
+if (window.laravelPwaInstall.canInstall()) {
+    console.log('App is ready for installation');
+}
+```
+
+### Deferring and Triggering Prompts
+The package automatically intercepts the `beforeinstallprompt` event and defers it. You can trigger the prompt manually at a better time (e.g., after a user interaction).
+
+```javascript
+async function myCustomInstallFlow() {
+    const outcome = await window.laravelPwaInstall.showPrompt();
+    if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+    }
+}
+```
+
+### Tracking Install Events
+You can listen for custom events to track the installation process:
+
+```javascript
+window.addEventListener('pwa-installable', (e) => {
+    console.log('PWA is ready to be installed');
+});
+
+window.addEventListener('pwa-installed', () => {
+    console.log('PWA was successfully installed');
+});
+```
+
+### Checking Standalone Mode
+Check if the app is currently running in standalone mode (installed):
+
+```javascript
+if (window.laravelPwaInstall.isStandalone()) {
+    console.log('App is running in standalone mode');
+}
+```
+
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 
