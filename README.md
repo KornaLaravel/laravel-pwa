@@ -50,35 +50,9 @@ Run the following command to publish config file,
 
 Add following code in root blade file in before close the body.
 
-    <script src="{{ asset('/sw.js') }}"></script>
-    <script>
-       if ("serviceWorker" in navigator) {
-          // Register a service worker hosted at the root of the
-          // site using the default scope.
-          navigator.serviceWorker.register("/sw.js").then(
-          (registration) => {
-             console.log("Service worker registration succeeded:", registration);
-          },
-          (error) => {
-             console.error(`Service worker registration failed: ${error}`);
-          },
-        );
-      } else {
-         console.error("Service workers are not supported.");
-      }
-    </script>
-
-### Custom Install Button
-You can add custom install button in your blade file by using the following code.
-
-    <!-- Add this inside <body> -->
-    <button id="pwa-install-btn" style="display:none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; z-index: 1000;">
-       Install App
-    </button>
-
-Also include the JS: (Add following code in root blade file in before close the body.)
-
-     <script src="{{ asset('pwa-install.js') }}"></script>
+    @laravelPwa
+    @pwaUpdateNotifier
+    @pwaInstallButton
 
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
