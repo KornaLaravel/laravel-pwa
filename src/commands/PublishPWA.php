@@ -4,9 +4,11 @@ namespace Ladumor\LaravelPwa\commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Console\Command;
+use Ladumor\LaravelPwa\ImageGenerator;
 
 class PublishPWA extends Command
 {
+    use ImageGenerator;
     /**
      * The console command name.
      *
@@ -36,6 +38,20 @@ class PublishPWA extends Command
     public function handle()
     {
         $publicDir = public_path();
+
+        $this->info('Generating Icons and Splash Screens...');
+        $sourceImage = $publicDir . DIRECTORY_SEPARATOR . 'pwa-source.png';
+        if (!file_exists($sourceImage)) {
+            $sourceImage = __DIR__ . '/../stubs/logo.png';
+            $this->warn('Source image (pwa-source.png) not found in public directory. Using default logo.');
+        }
+
+        $sizes = [
+            '72x72', '96x96', '128x128', '144x144', '152x152', '192x192', '384x384', '512x512'
+        ];
+
+        $this->generateIcons($sourceImage, $publicDir, $sizes);
+        $this->info('Icons generated successfully.');
 
         $manifestTemplate = file_get_contents(__DIR__ . '/../stubs/manifest.stub');
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'manifest.json', $manifestTemplate);

@@ -132,6 +132,21 @@ if (window.laravelPwaInstall.isStandalone()) {
 }
 ```
 
+## Splash Screen & Icon Generator
+
+This package includes a tool to automatically generate all required PWA icons and splash screen assets from a single source image.
+
+### How to use:
+1. Place your high-resolution source image (recommended 512x512 or larger) in the `public` directory of your Laravel application.
+2. Name the file `pwa-source.png`.
+3. Run the publish command:
+   ```bash
+   php artisan laravel-pwa:publish
+   ```
+4. The package will automatically generate icons of various sizes (72x72 to 512x512) and update your `manifest.json`.
+
+If `pwa-source.png` is not found, the package will use a default logo to generate the assets.
+
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 
