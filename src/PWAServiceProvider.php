@@ -33,7 +33,7 @@ class PWAServiceProvider extends ServiceProvider
 <script>
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data?.type === 'NEW_VERSION_AVAILABLE') {
+        if (event.data && event.data.type === 'NEW_VERSION_AVAILABLE') {
             console.log('[Laravel PWA] New version available');
             if (navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
@@ -55,8 +55,11 @@ HTML;
     protected function registerLaravelPwa()
     {
         Blade::directive('laravelPwa', function () {
-            return <<<'HTML'
-<script src="{{ asset('pwa-install.js') }}"></script>
+            $pwaInstall = asset('pwa-install.js');
+            $bgSync = asset('background-sync.js');
+            return <<<HTML
+<script src="{$pwaInstall}"></script>
+<script src="{$bgSync}"></script>
 <script>
     if ("serviceWorker" in navigator) {
         // Register a service worker hosted at the root of the
@@ -66,7 +69,7 @@ HTML;
                 console.log("Service worker registration succeeded:", registration);
             },
             (error) => {
-                console.error(`Service worker registration failed: ${error}`);
+                console.error(`Service worker registration failed: \${error}`);
             },
         );
     } else {

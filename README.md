@@ -54,6 +54,37 @@ Add following code in root blade file in before close the body.
     @pwaUpdateNotifier
     @pwaInstallButton
 
+## Background Sync
+
+This package supports Background Sync, allowing users to queue actions while offline and automatically synchronize them when the connection is restored.
+
+### Automatic Form Sync
+When a user submits a POST form while offline:
+1. The submission is intercepted.
+2. The data is saved locally in IndexedDB.
+3. A background sync event is registered.
+4. As soon as the browser detects the connection is restored, the Service Worker automatically retries the queued submissions.
+
+### Manual Request Queuing
+Developers can also manually queue requests using the global `window.laravelPwaSync` helper:
+
+```javascript
+const request = new Request('/api/data', {
+    method: 'POST',
+    body: JSON.stringify({ key: 'value' }),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+if (window.laravelPwaSync) {
+    await window.laravelPwaSync.queue(request);
+}
+```
+
+### Browser Support
+Background Sync relies on the `Service Worker` and `SyncManager` API. If the browser does not support these features, the application will continue to work as a standard web application without background synchronization.
+
 ### License
 The MIT License (MIT). Please see [License](LICENSE.md) File for more information   
 

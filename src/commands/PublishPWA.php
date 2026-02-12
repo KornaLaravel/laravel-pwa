@@ -53,6 +53,10 @@ class PublishPWA extends Command
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-install.js', $swTemplate);
         $this->info('pwa-install.js (custom install button) file is published.');
 
+        $bgSyncTemplate = file_get_contents(__DIR__ . '/../stubs/background-sync.stub');
+        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'background-sync.js', $bgSyncTemplate);
+        $this->info('background-sync.js (Background Sync) file is published.');
+
 
         $logoPath = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
         if (!file_exists($logoPath)) {
