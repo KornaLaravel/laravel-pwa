@@ -162,6 +162,25 @@ To update your PWA version and bust all caches, simply run:
 php artisan laravel-pwa:publish
 ```
 
+## Built-in Manifest Generator
+
+Instead of manually editing the `manifest.json` file, you can use the interactive manifest generator to configure your PWA settings:
+
+```bash
+php artisan pwa:manifest
+```
+
+This command will prompt you for:
+- App Name
+- Short Name
+- Description
+- Start URL
+- Theme & Background Colors
+- Display Mode (fullscreen, standalone, etc.)
+- Orientation
+
+After running this command, remember to run `php artisan laravel-pwa:publish` to apply the changes to your public directory.
+
 ## Debug & Dev Tools
 
 This package includes a set of developer-friendly tools to help you debug your PWA implementation.

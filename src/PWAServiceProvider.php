@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Ladumor\LaravelPwa\commands\PublishPWA;
 use Ladumor\LaravelPwa\commands\DebugPWA;
+use Ladumor\LaravelPwa\commands\GenerateManifest;
 
 class PWAServiceProvider extends ServiceProvider
 {
@@ -134,9 +135,14 @@ HTML;
         return new DebugPWA();
        });
 
+      $this->app->singleton('pwa:manifest', function ($app) {
+        return new GenerateManifest();
+       });
+
       $this->commands([
           'laravel-pwa:publish',
           'pwa:debug',
+          'pwa:manifest',
       ]);
     }
 }
