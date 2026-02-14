@@ -12,7 +12,6 @@ self.addEventListener("install", (event) => {
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(FILES_TO_CACHE))
     );
-    self.skipWaiting();
 });
 
 // Remove old caches
@@ -41,11 +40,6 @@ self.addEventListener('message', (event) => {
 // Notify clients about updates
 self.addEventListener('install', (event) => {
     console.log('[Laravel PWA] Service Worker installing...');
-    self.clients.matchAll({ type: 'window' }).then(clients => {
-        clients.forEach(client => {
-            client.postMessage({ type: 'NEW_VERSION_AVAILABLE' });
-        });
-    });
 });
 
 self.addEventListener('activate', (event) => {

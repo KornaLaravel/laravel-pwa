@@ -54,14 +54,30 @@ HTML;
             return <<<'HTML'
 <script>
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data && event.data.type === 'NEW_VERSION_AVAILABLE') {
+    navigator.serviceWorker.ready.then(registration => {
+        function notifyUpdate(worker) {
             console.log('[Laravel PWA] New version available');
-            if (navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+            if (confirm('[Laravel PWA] New version available. Reload now?')) {
+                worker.postMessage({ type: 'SKIP_WAITING' });
             }
-            window.location.reload();
         }
+
+        if (registration.waiting) {
+            notifyUpdate(registration.waiting);
+        }
+
+        registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    notifyUpdate(newWorker);
+                }
+            });
+        });
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
     });
 }
 </script>
