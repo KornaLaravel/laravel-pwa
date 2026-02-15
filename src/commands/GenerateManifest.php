@@ -33,7 +33,6 @@ class GenerateManifest extends Command
         $name = $this->ask('What is the name of your application?', 'Laravel PWA');
         $shortName = $this->ask('What is the short name of your application?', 'PWA');
         $description = $this->ask('Provide a brief description of your application', 'My Awesome Laravel PWA');
-        $startUrl = $this->ask('What is the start URL?', '/index.php');
         $themeColor = $this->ask('What is the theme color (hex)?', '#6777ef');
         $backgroundColor = $this->ask('What is the background color (hex)?', '#ffffff');
         $display = $this->choice('Select display mode', ['fullscreen', 'standalone', 'minimal-ui', 'browser'], 1);
@@ -43,7 +42,7 @@ class GenerateManifest extends Command
             'name' => $name,
             'short_name' => $shortName,
             'description' => $description,
-            'start_url' => $startUrl,
+            'start_url' => '/index.php',
             'background_color' => $backgroundColor,
             'theme_color' => $themeColor,
             'display' => $display,

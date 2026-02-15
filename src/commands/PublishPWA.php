@@ -40,10 +40,20 @@ class PublishPWA extends Command
         $publicDir = public_path();
 
         $this->info('Generating Icons and Splash Screens...');
-        $sourceImage = $publicDir . DIRECTORY_SEPARATOR . 'pwa-source.png';
+
+        $filename = $this->ask('Enter source image file name (must exist in public directory)', 'pwa-source.png');
+        $sourceImage = $publicDir . DIRECTORY_SEPARATOR . $filename;
+
         if (!file_exists($sourceImage)) {
-            $sourceImage = __DIR__ . '/../stubs/logo.png';
-            $this->warn('Source image (pwa-source.png) not found in public directory. Using default logo.');
+            $projectLogo = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
+
+            if (file_exists($projectLogo)) {
+                $sourceImage = $projectLogo;
+                $this->warn("{$filename} not found. Using public/logo.png as source image.");
+            } else {
+                $sourceImage = __DIR__ . '/../stubs/logo.png';
+                $this->warn('Source image not found in public directory. Using default package logo.');
+            }
         }
 
         $sizes = [
