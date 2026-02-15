@@ -8,6 +8,7 @@ const FILES_TO_CACHE = [
 
 // Pre-cache critical resources
 self.addEventListener("install", (event) => {
+    console.log('[Laravel PWA] Service Worker installing...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(FILES_TO_CACHE))
@@ -16,6 +17,7 @@ self.addEventListener("install", (event) => {
 
 // Remove old caches
 self.addEventListener("activate", (event) => {
+    console.log('[Laravel PWA] Service Worker activated.');
     event.waitUntil(
         caches.keys().then(keys =>
             Promise.all(
@@ -35,15 +37,6 @@ self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
-});
-
-// Notify clients about updates
-self.addEventListener('install', (event) => {
-    console.log('[Laravel PWA] Service Worker installing...');
-});
-
-self.addEventListener('activate', (event) => {
-    console.log('[Laravel PWA] Service Worker activated.');
 });
 
 // Fetch strategy
