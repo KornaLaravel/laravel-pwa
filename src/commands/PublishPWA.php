@@ -4,9 +4,11 @@ namespace Ladumor\LaravelPwa\commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Console\Command;
+use Ladumor\LaravelPwa\ImageGenerator;
 
 class PublishPWA extends Command
 {
+    use ImageGenerator;
     /**
      * The console command name.
      *
@@ -37,7 +39,34 @@ class PublishPWA extends Command
     {
         $publicDir = public_path();
 
+        $this->info('Generating Icons and Splash Screens...');
+
+        $filename = $this->ask('Enter source image file name (must exist in public directory)', 'pwa-source.png');
+        $sourceImage = $publicDir . DIRECTORY_SEPARATOR . $filename;
+
+        if (!file_exists($sourceImage)) {
+            $projectLogo = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
+
+            if (file_exists($projectLogo)) {
+                $sourceImage = $projectLogo;
+                $this->warn("{$filename} not found. Using public/logo.png as source image.");
+            } else {
+                $sourceImage = __DIR__ . '/../stubs/logo.png';
+                $this->warn('Source image not found in public directory. Using default package logo.');
+            }
+        }
+
+        $sizes = [
+            '72x72', '96x96', '128x128', '144x144', '152x152', '192x192', '384x384', '512x512'
+        ];
+
+        $this->generateIcons($sourceImage, $publicDir, $sizes);
+        $this->info('Icons generated successfully.');
+
+        $version = time();
+        
         $manifestTemplate = file_get_contents(__DIR__ . '/../stubs/manifest.stub');
+        $manifestTemplate = str_replace('{{VERSION}}', $version, $manifestTemplate);
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'manifest.json', $manifestTemplate);
         $this->info('manifest.json file is published.');
 
@@ -46,12 +75,21 @@ class PublishPWA extends Command
         $this->info('offline.html file is published.');
 
         $swTemplate = file_get_contents(__DIR__ . '/../stubs/sw.stub');
+        $swTemplate = str_replace('{{VERSION}}', $version, $swTemplate);
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'sw.js', $swTemplate);
-        $this->info('sw.js (Service Worker) file is published.');
+        $this->info("sw.js (Service Worker) file is published with version: {$version}.");
 
         $swTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-install.stub');
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-install.js', $swTemplate);
         $this->info('pwa-install.js (custom install button) file is published.');
+
+        $bgSyncTemplate = file_get_contents(__DIR__ . '/../stubs/background-sync.stub');
+        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'background-sync.js', $bgSyncTemplate);
+        $this->info('background-sync.js (Background Sync) file is published.');
+
+        $debugTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-debug.stub');
+        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-debug.js', $debugTemplate);
+        $this->info('pwa-debug.js (Debug Tool) file is published.');
 
 
         $logoPath = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
