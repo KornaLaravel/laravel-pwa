@@ -22,6 +22,7 @@ class PWAServiceProvider extends ServiceProvider
         $this->registerLaravelPwa();
         $this->registerPwaInstallButton();
         $this->registerPwaDebug();
+        $this->registerPwaAssets();
     }
 
     /**
@@ -132,6 +133,21 @@ HTML;
 <button id="pwa-install-btn" style="display:none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; z-index: 1000; cursor: pointer;">
    Install App
 </button>
+HTML;
+        });
+    }
+
+    protected function registerPwaAssets()
+    {
+        Blade::directive('pwaAssets', function ($expressions) {
+
+            $logo = empty($expressions['logo']) ? $expressions['logo'] : 'logo.png';
+            $themeColor = empty($expressions['logo']) ? $expressions['logo'] : '#39B54A';
+
+            return <<<'HTML'
+<meta name="theme-color" content="{{$themeColor}}"/>
+<link rel="apple-touch-icon" href="{{ asset($logo) }}">
+<link rel="manifest" href="{{ asset('/manifest.json') }}">
 HTML;
         });
     }
