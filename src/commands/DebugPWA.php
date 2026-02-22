@@ -3,9 +3,11 @@
 namespace Ladumor\LaravelPwa\commands;
 
 use Illuminate\Console\Command;
+use Ladumor\LaravelPwa\FileGenerator;
 
 class DebugPWA extends Command
 {
+    use FileGenerator;
     /**
      * The console command name.
      *
@@ -27,6 +29,12 @@ class DebugPWA extends Command
      */
     public function handle()
     {
+        $publicDir = public_path();
+        $debugTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-debug.stub');
+        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-debug.js', $debugTemplate);
+
+        $this->info('pwa-debug.js (Debug Tool) file is published.');
+
         $this->info('PWA Debug Tool');
         $this->line('----------------');
         $this->line('This command helps you debug your PWA implementation.');
@@ -42,7 +50,6 @@ class DebugPWA extends Command
         $this->line('');
         $this->info('Usage:');
         $this->line('Add @pwaDebug to your blade file to enable the on-screen debug helper.');
-        $this->line('Run "php artisan laravel-pwa:publish" to ensure all debug assets are available.');
     }
 
     /**
