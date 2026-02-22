@@ -18,11 +18,36 @@ class PWAServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerPwaHead();
         $this->registerPwaUpdateNotifier();
         $this->registerLaravelPwa();
         $this->registerPwaInstallButton();
         $this->registerPwaDebug();
-        $this->registerPwaAssets();
+    }
+
+    /**
+     * Register pwaHead blade directive
+     *
+     * @return void
+     */
+    protected function registerPwaHead()
+    {
+        Blade::directive('pwaHead', function ($expression) {
+            $expression = trim($expression, '()');
+            $params = array_map('trim', explode(',', $expression));
+
+            $logo = (!empty($params[0])) ? $params[0] : "'logo.png'";
+            $themeColor = (!empty($params[1])) ? $params[1] : "'#6777ef'";
+
+            return "<?php
+                \$logo = asset($logo);
+                \$themeColor = $themeColor;
+                \$manifest = asset('manifest.json');
+                echo '<meta name=\"theme-color\" content=\"' . \$themeColor . '\"/>' . PHP_EOL;
+                echo '<link rel=\"apple-touch-icon\" href=\"' . \$logo . '\">' . PHP_EOL;
+                echo '<link rel=\"manifest\" href=\"' . \$manifest . '\">';
+            ?>";
+        });
     }
 
     /**
@@ -133,21 +158,6 @@ HTML;
 <button id="pwa-install-btn" style="display:none; position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; z-index: 1000; cursor: pointer;">
    Install App
 </button>
-HTML;
-        });
-    }
-
-    protected function registerPwaAssets()
-    {
-        Blade::directive('pwaAssets', function ($expressions) {
-
-            $logo = empty($expressions['logo']) ? $expressions['logo'] : 'logo.png';
-            $themeColor = empty($expressions['logo']) ? $expressions['logo'] : '#39B54A';
-
-            return <<<'HTML'
-<meta name="theme-color" content="{{$themeColor}}"/>
-<link rel="apple-touch-icon" href="{{ asset($logo) }}">
-<link rel="manifest" href="{{ asset('/manifest.json') }}">
 HTML;
         });
     }

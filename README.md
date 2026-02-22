@@ -41,12 +41,14 @@ Run the following command to publish config file,
     php artisan laravel-pwa:publish
 
 ## Configure PWA
- Add following code in root blade file in header section.
+Add following code in root blade file in header section.
 
     <!-- PWA  -->
-    <meta name="theme-color" content="#6777ef"/>
-    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
-    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    @pwaHead
+
+You can also pass custom logo and theme color as arguments:
+
+    @pwaHead('custom-logo.png', '#ff0000')
 
 Add following code in root blade file in before close the body.
 
