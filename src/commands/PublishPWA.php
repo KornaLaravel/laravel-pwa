@@ -4,11 +4,13 @@ namespace Ladumor\LaravelPwa\commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Console\Command;
+use Ladumor\LaravelPwa\FileGenerator;
 use Ladumor\LaravelPwa\ImageGenerator;
 
 class PublishPWA extends Command
 {
     use ImageGenerator;
+    use FileGenerator;
     /**
      * The console command name.
      *
@@ -87,11 +89,6 @@ class PublishPWA extends Command
         $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'background-sync.js', $bgSyncTemplate);
         $this->info('background-sync.js (Background Sync) file is published.');
 
-        $debugTemplate = file_get_contents(__DIR__ . '/../stubs/pwa-debug.stub');
-        $this->createFile($publicDir . DIRECTORY_SEPARATOR, 'pwa-debug.js', $debugTemplate);
-        $this->info('pwa-debug.js (Debug Tool) file is published.');
-
-
         $logoPath = $publicDir . DIRECTORY_SEPARATOR . 'logo.png';
         if (!file_exists($logoPath)) {
             if (copy(__DIR__ . '/../stubs/logo.png', $logoPath)) {
@@ -103,16 +100,5 @@ class PublishPWA extends Command
         $this->composer->dumpOptimized();
 
         $this->info('Greeting!.. Enjoy PWA site...');
-    }
-
-    public static function createFile($path, $fileName, $contents)
-    {
-        if (!file_exists($path)) {
-            mkdir($path, 0755, true);
-        }
-
-        $path = $path . $fileName;
-
-        file_put_contents($path, $contents);
     }
 }

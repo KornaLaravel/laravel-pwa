@@ -44,6 +44,12 @@ self.addEventListener("fetch", (event) => {
 
     const request = event.request;
 
+    // ✅ Never cache non-GET requests (fix Cache.put POST error)
+    if (request.method !== 'GET') {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     // ✅ Handle page navigation (offline fallback)
     if (request.mode === "navigate") {
         event.respondWith(
